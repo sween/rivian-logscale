@@ -6,6 +6,14 @@ Rivian Telemetry to Crowdstrike's LogScale
 Documentation:
 [LogScale](https://library.humio.com/integrations/api-ingest.html)
 
+Build:
+
+```
+docker build -t rivian-logscale .
+docker image tag rivian-logscale sween/rivian-logscale:latest
+docker push sween/rivian-logscale:latest
+```
+
 Create a namespace and add your Rivian Credentials, LogScale apikey as a secret:
 
 ```
