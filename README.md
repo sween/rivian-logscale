@@ -3,7 +3,7 @@ Rivian Telemetry to Crowdstrike's LogScale
 
 <img src="https://github.com/sween/rivian-logscale/raw/main/assets/rivian-logscale.png" alt="Aspiring Brick Builder">
 
-Create a namespace and add your Rivian Credentials as a secret:
+Create a namespace and add your Rivian Credentials, LogScale apikey as a secret:
 
 ```
 kubectl create ns rivian
