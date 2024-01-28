@@ -45,16 +45,36 @@ class RivianLogScale(object):
         whipstatus['owner'] = self.owner
         whipstatus['last_connection'] = last_connection
         whipstatus['ota'] = ota
-        deezwatts = json.dumps(whipstatus)
+        # deezwatts = json.dumps(whipstatus)
 
+        payload = [
+            {
+                'tags': {
+                'host': self.rivianid,
+                'source': 'status.log'
+                },
+                    'events': [
+                    {
+                        'timestamp': '2016-06-06T12:00:00+02:00',
+                        'attributes': {
+                            'whipstatus': whipstatus,
+                        }
+                    }
+                ]
+            }
+            ]
+
+        payload = json.dumps(payload)
         # need url
+        # POST /api/v1/ingest/humio-structured
+        # 
         ingesturl = "",
         # need header
         headers = {
             'Authorization': os.environ['CS_LOGSCALE_APIKEY'],
             'Content-Type': 'application/json'
         }
-        response = requests.request("POST", ingesturl, headers=headers, payload=deezwatts)
+        response = requests.request("POST", ingesturl, headers=headers, payload=payload)
         response = response.json()
 
 if __name__ == '__main__':

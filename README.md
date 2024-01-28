@@ -3,6 +3,9 @@ Rivian Telemetry to Crowdstrike's LogScale
 
 <img src="https://github.com/sween/rivian-logscale/raw/main/assets/rivian-logscale.png" alt="Aspiring Brick Builder">
 
+Documentation:
+[LogScale](https://library.humio.com/integrations/api-ingest.html)
+
 Create a namespace and add your Rivian Credentials, LogScale apikey as a secret:
 
 ```
