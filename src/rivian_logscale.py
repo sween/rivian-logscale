@@ -46,6 +46,7 @@ class RivianLogScale(object):
         whipstatus['last_connection'] = last_connection
         whipstatus['ota'] = ota
         deezwatts = json.dumps(whipstatus)
+        today = datetime.now()
 
         payload = [
             {
@@ -55,18 +56,15 @@ class RivianLogScale(object):
                 },
                     "events": [
                     {
-                        "timestamp": "2016-06-06T12:00:00+02:00",
-                        "attributes": {
-                            "key": "value",
-                            "whipstatus": deezwatts
-                        }
+                        "timestamp": today.isoformat(),
+                        "attributes": deezwatts
                     }
                 ]
             }
         ]
-        print(payload)
+        #print(payload)
         #payload = json.dumps(payload)
-        print(payload)
+        #print(payload)
         
         client = HumioIngestClient(
             base_url= "https://cloud.us.humio.com",
