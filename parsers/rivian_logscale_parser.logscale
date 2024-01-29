@@ -1,0 +1,68 @@
+parseJson()
+
+| fname:=whip.data.getVehicle.invitedUsers[0].firstName
+| lname:=whip.data.getVehicle.invitedUsers[0].lastName
+| ota_version:=ota.data.getVehicle.currentOTAUpdateDetails.version
+| alarm_status:=data.vehicleState.alarmSoundStatus.value
+
+// Battery Stats
+| battery_lvl:=data.vehicleState.batteryLevel.value
+| battery_limit:=data.vehicleState.batteryLimit.value
+| power_state:=data.vehicleState.powerState.value
+| amperage:=charge.charge_schedule.data.getVehicle.chargingSchedules[0].amperage
+
+// Vehicle Info
+| VIN:=owner.data.currentUser.vehicles[0].vin
+| vehicle_id:=owner.data.currentUser.vehicles[0].vehicle.id
+| model:=owner.data.currentUser.vehicles[0].vehicle.model
+| make:=owner.data.currentUser.vehicles[0].vehicle.make
+| year:=owner.data.currentUser.vehicles[0].vehicle.modelYear
+| trim:=owner.data.currentUser.vehicles[0].vehicle.mobileConfiguration.trimOption.optionName
+| exterior_color:=owner.data.currentUser.vehicles[0].vehicle.mobileConfiguration.exteriorColorOption.optionName
+| expected_build_date:=owner.data.currentUser.vehicles[0].vehicle.expectedBuildDate
+
+| steeringWheelHeat:=data.vehicleState.steeringWheelHeat.value
+
+// Window Status
+| windowRearRightClosed:=data.vehicleState.windowRearRightClosed.value
+| windowRearLeftClosed:=data.vehicleState.windowRearLeftClosed.value
+| windowFrontRightClosed:=data.vehicleState.windowFrontRightClosed.value
+| windowFrontLeftClosed:=data.vehicleState.windowFrontLeftClosed.value
+
+| gearGuardLocked:=data.vehicleState.gearGuardLocked.value
+| gearStatus:=data.vehicleState.gearStatus.value
+
+// Tire Status
+| tirePressureStatusFrontLeft:=data.vehicleState.tirePressureStatusFrontLeft.value
+| tirePressureStatusFrontRight:=data.vehicleState.tirePressureStatusFrontRight.value
+| tirePressureStatusRearLeft:=data.vehicleState.tirePressureStatusRearLeft.value
+| tirePressureStatusRearRight:=data.vehicleState.tirePressureStatusRearRight.value
+
+// Location
+| latitude:=data.vehicleState.gnssLocation.latitude
+| longitude:=data.vehicleState.gnssLocation.longitude
+
+// Door Status
+| doorFrontLeftLocked:=data.vehicleState.doorFrontLeftLocked.value
+| doorFrontRightLocked:=data.vehicleState.doorFrontRightLocked.value
+| doorRearLeftLocked:=data.vehicleState.doorRearLeftLocked.value
+| doorRearRightLocked:=data.vehicleState.doorRearRightLocked.value
+
+| doorFrontLeftClosed:=data.vehicleState.doorFrontLeftClosed.value
+| doorFrontRightClosed:=data.vehicleState.doorFrontRightClosed.value
+| doorRearLeftClosed:=data.vehicleState.doorRearLeftClosed.value
+| doorRearRightClosed:=data.vehicleState.doorRearRightClosed.value
+
+  // Catch all.
+| case{
+  timestamp=*
+    | findTimestamp(field=timestamp) ;
+
+  * ;
+}
+
+| case {
+  @timestamp!=*
+    | @timestamp:=now() ;
+  * ;
+}
