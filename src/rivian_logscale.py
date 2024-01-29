@@ -67,7 +67,7 @@ class RivianLogScale(object):
         #print(payload)
         
         client = HumioIngestClient(
-            base_url= "https://cloud.us.humio.com",
+            base_url= "https://cloud.community.humio.com",
             ingest_token= os.environ["CS_LOGSCALE_APIKEY"]
         )
 
