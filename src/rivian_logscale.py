@@ -56,7 +56,7 @@ class RivianLogScale(object):
                 },
                     "events": [
                     {
-                        "timestamp": today.isoformat(),
+                        "timestamp": today.isoformat(sep='T',timespec='auto') + "Z",
                         "attributes": deezwatts
                     }
                 ]
