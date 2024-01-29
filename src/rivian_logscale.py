@@ -57,7 +57,7 @@ class RivianLogScale(object):
                     "events": [
                     {
                         "timestamp": today.isoformat(sep='T',timespec='auto') + "Z",
-                        "attributes": deezwatts
+                        "attributes": whipstatus
                     }
                 ]
             }
@@ -79,4 +79,4 @@ if __name__ == '__main__':
     while True:
         RivianLogScale().run()
         # lets not piss off the Site Reliability Teams at LogScale
-        time.sleep(120)
+        time.sleep(140)
