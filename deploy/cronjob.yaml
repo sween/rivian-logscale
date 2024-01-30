@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: rivian-logscale
+  labels:
+    app: rivian-logscale
+spec:
+  schedule: "*/2 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: rivian-logscale
+            image: sween/rivian-logscale:latest
+            env:
+            - name: RIVIAN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rivian-user-pass
+                  key: rivian_password
+            - name: RIVIAN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rivian-user-pass
+                  key: rivian_username
+            - name: CS_LOGSCALE_APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: cs-logscale-creds
+                  key: apikey
+          restartPolicy: OnFailure

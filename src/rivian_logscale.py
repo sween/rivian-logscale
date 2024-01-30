@@ -71,12 +71,13 @@ class RivianLogScale(object):
             ingest_token= os.environ["CS_LOGSCALE_APIKEY"]
         )
 
-        client.ingest_json_data(payload)
-
+        ingest_response = client.ingest_json_data(payload)
+        print(ingest_response)
+        print(today)
 
 if __name__ == '__main__':
-    
-    while True:
-        RivianLogScale().run()
+    RivianLogScale().run()
+    #while True:
+        #RivianLogScale().run()
         # lets not piss off the Site Reliability Teams at LogScale
-        time.sleep(140)
+        #time.sleep(140)
