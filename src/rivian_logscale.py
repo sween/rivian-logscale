@@ -22,17 +22,22 @@ class RivianLogScale(object):
     def run(self):
         # status info
         whipstatus = self.rivian.get_vehicle_state(self.rivianid)
+        time.sleep(2)
         # whip info
         whip = self.rivian.get_vehicle(self.rivianid)
+        time.sleep(2)
 
         # charging info
         charge = self.rivian.get_live_session_data(self.rivianid)
-        charge_schedule = self.rivian.get_charging_schedule(self.rivianid)
+        time.sleep(2)
 
+        charge_schedule = self.rivian.get_charging_schedule(self.rivianid)
+        time.sleep(2)
+        
         charge['charge_schedule'] = charge_schedule
 
         # ota details
-        #ota = self.rivian.get_ota_details(self.rivianid)
+        ota = self.rivian.get_ota_details(self.rivianid)
 
         # last connection
         #last_connection = self.rivian.get_vehicle_last_connection(self.rivianid)
@@ -44,7 +49,7 @@ class RivianLogScale(object):
         whipstatus['charge'] = charge
         whipstatus['owner'] = self.owner
         # whipstatus['last_connection'] = last_connection
-        # whipstatus['ota'] = ota
+        whipstatus['ota'] = ota
         # deezwatts = json.dumps(whipstatus)
         today = datetime.now()
 
