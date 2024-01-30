@@ -32,10 +32,10 @@ class RivianLogScale(object):
         charge['charge_schedule'] = charge_schedule
 
         # ota details
-        ota = self.rivian.get_ota_details(self.rivianid)
+        #ota = self.rivian.get_ota_details(self.rivianid)
 
         # last connection
-        last_connection = self.rivian.get_vehicle_last_connection(self.rivianid)
+        #last_connection = self.rivian.get_vehicle_last_connection(self.rivianid)
 
 
         # status is our main dictionary, add the other two keys
@@ -43,9 +43,9 @@ class RivianLogScale(object):
         whipstatus['whip'] = whip
         whipstatus['charge'] = charge
         whipstatus['owner'] = self.owner
-        whipstatus['last_connection'] = last_connection
-        whipstatus['ota'] = ota
-        deezwatts = json.dumps(whipstatus)
+        # whipstatus['last_connection'] = last_connection
+        # whipstatus['ota'] = ota
+        # deezwatts = json.dumps(whipstatus)
         today = datetime.now()
 
         payload = [
