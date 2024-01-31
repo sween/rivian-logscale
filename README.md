@@ -26,17 +26,12 @@ kubectl create secret generic cs-logscale-creds -n rivian \
     --from-literal=apikey='xyz.....'
 ```
 
-Apply as a Deployment
+Apply as a CronJob
 
 ```
 kubectl apply -f deploy/cronjob.yaml -n rivian
 ```
 
-Apply as a Deployment
-
-```
-kubectl apply -f deploy/deployment.yaml -n rivian
-```
 
 More Documentation and Errata over @ [Deez Watts - A Rivian Data Adventure](https://www.deezwatts.com)
 
