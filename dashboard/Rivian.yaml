@@ -1,0 +1,329 @@
+name: Rivian
+updateFrequency: never
+timeSelector: {}
+sharedTimeInterval:
+  enabled: true
+  isLive: false
+  start: 1d
+widgets:
+  9d6646b8-848b-43b3-914b-1e743d6eb400:
+    x: 0
+    y: 6
+    height: 4
+    queryString: |-
+      | "Driver Front Door":=doorFrontLeftClosed
+      | "Driver Rear Door":=doorRearLeftClosed
+      | "Passenger Front Door":=doorFrontRightClosed
+      | "Passenger Rear Door":=doorRearRightClosed
+      | "Frunk":=data.vehicleState.closureFrunkClosed.value
+      | "Lift Gate":=data.vehicleState.closureLiftgateClosed.value
+      | groupBy([make], function=(selectFromMax(field="@timestamp", include=[Frunk, "Lift Gate", "Driver Front Door", "Driver Rear Door", "Passenger Rear Door", "Passenger Front Door"])))
+      | drop([make])
+      | transpose()
+      | rename(field="column", as="Egress")
+      | rename(field="row[1]", as="State")
+      | case{
+          State="closed" | DoorAlert:="✅";
+          *              | DoorAlert:="❗️";
+      }
+      | select([Egress, DoorAlert, State])
+    end: now
+    start: 1d
+    width: 4
+    options:
+      cell-overflow: wrap-text
+      configured-columns: {}
+      row-numbers-enabled: false
+    visualization: table-view
+    title: Egress
+    isLive: false
+    type: query
+  ddbc56e6-c798-400c-886d-2dd49b1719de:
+    x: 8
+    y: 3
+    height: 3
+    queryString: |-
+      | selectLast(fields=["@timestamp", "battery_limit"])
+      | drop(@timestamp)
+    end: now
+    start: 12h
+    width: 2
+    options:
+      background-color: '#2aa34b'
+      default: {}
+      suffix: '%'
+      text-color: '#ffffff'
+    visualization: single-value
+    title: Charging Target
+    isLive: false
+    type: query
+  a59675cf-b120-4114-be03-7b8e351da72c:
+    x: 0
+    y: 3
+    height: 3
+    queryString: |-
+      | selectLast(fields=["@timestamp", battery_lvl])
+      | drop(@timestamp)
+    end: now
+    start: 1d
+    width: 2
+    options:
+      trellisMaxColumns: 4
+      suffix: '%'
+      labels:
+      - label: FULL
+        value: 100
+      - label: EMPTY
+        value: 0
+      padding: 0
+      decimal-places: 0
+      show-min-max: false
+      trellisShowBorders: false
+      gaugeType: radialNeedle
+      thresholdConfig:
+        palette: Green yellow red
+        reversePalette: true
+        thresholds:
+        - value: 5
+        - value: 10
+        - value: 15
+        - value: 20
+        - value: 25
+        - value: 29
+        - value: 35
+        - value: 40
+        - value: 45
+        - value: 50
+        - value: 55
+        - value: 59
+        - value: 65
+        - value: 70
+        - value: 75
+        - value: 80
+        - value: 85
+        - value: 90
+        - value: 95
+      value-format: abbreviated
+    visualization: gauge
+    title: Electric Charge
+    isLive: false
+    type: query
+  df21d985-fbbb-4a4f-a295-7f91c95f5f3b:
+    x: 2
+    y: 0
+    height: 3
+    queryString: |-
+      | car:=format(format="%s %s", field=[make, model])
+      | selectFromMax(field=@timestamp, include=[car])
+      | collect([car])
+    end: now
+    start: 1d
+    width: 2
+    options:
+      background-color: '#007eed'
+      default: {}
+      text-color: '#ffffff'
+    visualization: single-value
+    title: Car
+    isLive: false
+    type: query
+  89d4dabc-c67c-4b44-baf7-c9c0857dbb3e:
+    x: 4
+    y: 6
+    height: 4
+    queryString: |-
+      | "Front Driver":=tirePressureStatusFrontLeft
+      | "Front Passenger":=tirePressureStatusFrontRight
+      | "Rear Driver":=tirePressureStatusRearLeft
+      | "Rear Passenger":=tirePressureStatusRearRight
+      | selectLast(fields=["@timestamp", data.vehicleState.tirePressureStatusFrontLeft.value, "Front Driver", "Front Passenger", "Rear Driver", "Rear Passenger"])
+
+      | "Front 🛞":=format(format="Driver:\t\t%s\nPassenger:\t%s\n", field=["Front Driver", "Front Passenger"])
+      | "Rear 🛞":=format(format="Driver:\t\t%s\nPassenger:\t%s\n", field=["Rear Driver", "Rear Passenger"])
+      | drop([data, @timestamp])
+
+      | table(["Front 🛞", "Rear 🛞"])
+    end: now
+    start: 1d
+    width: 3
+    options:
+      cell-overflow: wrap-text
+      configured-columns: {}
+      row-numbers-enabled: false
+    visualization: table-view
+    title: Current Tire Status
+    isLive: false
+    type: query
+  6f558d48-aa6b-4765-a727-ff9bc2e056fe:
+    x: 6
+    y: 0
+    height: 3
+    queryString: |2-
+
+      | groupBy(model, function=(selectFromMax(field="@timestamp", include=[trim])))
+    end: '2024-01-29T15:05:29.64Z'
+    start: '2024-01-28T15:05:29.64Z'
+    width: 2
+    options:
+      background-color: '#0063b2'
+      default: {}
+      text-color: '#ffa500'
+    visualization: single-value
+    title: Trim Option
+    isLive: false
+    type: query
+  note-1705947411317-0:
+    x: 0
+    y: 0
+    height: 3
+    text: '[Deez Watts](https://deezwatts.com) is an Official Rivian Data Adventure,
+      "Driven" by community, my whip, my laptop, my data, and a man with mostly good
+      intentions... but unofficially a Rivian Jam.'
+    width: 2
+    title: Rivian Car Data
+    type: note
+  557ec72a-6e7c-4132-8b1a-a1e8d02a6e0d:
+    x: 2
+    y: 3
+    height: 3
+    queryString: |-
+      | case {
+          currentMiles!=* |currentMiles:=charge.data.getLiveSessionData.currentMiles.value ;
+      * ;
+       }
+      | selectLast(fields=["@timestamp","currentMiles"])
+      | drop([@timestamp])
+    end: now
+    start: 1d
+    width: 2
+    options:
+      background-color: '#e6e6e6'
+      default: {}
+      yAxisTitle: ''
+      text-color: '#f40000'
+    visualization: single-value
+    title: Range
+    isLive: false
+    type: query
+  d1fea72d-1306-4aab-949e-195400747cd4:
+    x: 4
+    y: 0
+    height: 3
+    queryString: |-
+      | ColorOption:=owner.data.currentUser.vehicles[0].vehicle.mobileConfiguration.exteriorColorOption.optionName
+      | groupBy(make, function=(selectFromMax(field="@timestamp", include=[ColorOption])))
+    end: '2024-01-29T15:05:29.64Z'
+    start: '2024-01-28T15:05:29.64Z'
+    width: 2
+    options:
+      background-color: '#0063b2'
+      default: {}
+      text-color: '#ffa500'
+    visualization: single-value
+    title: Exterior Color
+    isLive: false
+    type: query
+  4f0f6cc8-88f5-4bc5-85b1-8f9bce05464a:
+    x: 4
+    y: 3
+    height: 3
+    queryString: |2
+
+      | selectLast(fields=["@timestamp",data.vehicleState.chargerState.value])
+      | drop(@timestamp)
+
+      | case{
+          data.vehicleState.chargerState.value="charging_ready" | charge_status:="Not Plugged In 🚫🔌";
+          data.vehicleState.chargerState.value=/(charging_active|charging_scheduled|charging_complete)/ | charge_status:="Plugged In 🔌";
+
+      }
+      | drop([data.vehicleState.chargerState.value])
+    end: now
+    start: 1d
+    width: 4
+    options:
+      background-color: '#f40000'
+      default: {}
+      text-color: '#ffffff'
+    visualization: single-value
+    title: Charging State
+    isLive: false
+    type: query
+  31990be7-05e6-44ef-bfc7-6aa087904178:
+    x: 8
+    y: 0
+    height: 3
+    queryString: |-
+      | selectLast(fields=["@timestamp", doorFrontLeftLocked, doorFrontRightLocked, doorRearLeftLocked, doorRearRightLocked])
+      | door_locked_str:=format(format="%s,%s,%s,%s",field=[doorFrontLeftLocked, doorFrontRightLocked, doorRearLeftLocked, doorRearRightLocked])
+      | door_locked_arr:=splitString(by=",", field=door_locked_str)
+
+      | array:reduceAll("door_locked_arr[]", var=locked_status, function=groupBy([locked_status]))
+
+      | SecurityState:="Unlocked 🔓"
+
+      | case {
+          locked_status="locked" _count=4 | SecurityState:="Secured 🔐";
+      }
+      | select([SecurityState])
+    end: now
+    start: 1d
+    width: 4
+    options:
+      background-color: '#ebebeb'
+      default: {}
+      text-color: '#007ae4'
+      trellisShowBorders: true
+    visualization: single-value
+    title: Security State
+    isLive: false
+    type: query
+  29e2db1c-b451-4108-a7f2-274d43f5d924:
+    x: 7
+    y: 6
+    height: 6
+    queryString: |-
+      // | latitude:=data.vehicleState.gnssLocation.latitude
+      // | longitude:=data.vehicleState.gnssLocation.longitude
+      // | latitude=*
+      | worldMap(lat=latitude, lon=longitude)
+
+      // | table([@timestamp, expected_build_date, VIN, make, model, fname, lname, ota_version, alarm_status, battery_lvl, battery_limit, gearStatus, gearGuardLocked, tirePressureStatusFrontLeft, tirePressureStatusFrontRight, tirePressureStatusRearLeft, tirePressureStatusRearRight])
+      // | table([whip.data.getVehicle])
+    end: now
+    start: 1d
+    width: 5
+    options:
+      zLevel: 2.2
+    visualization: world-map
+    title: Car Location
+    isLive: false
+    type: query
+  51b44982-7c74-488c-a779-f91a742c950a:
+    x: 10
+    y: 3
+    height: 3
+    queryString: '| selectFromMax(field="@timestamp", include=[amperage])'
+    end: now
+    start: 1d
+    width: 2
+    options:
+      background-color: '#f9e686'
+      default: {}
+      yAxisTitle: AC
+      text-color: '#000000'
+    visualization: single-value
+    title: Current Charging Limit
+    isLive: false
+    type: query
+$schema: https://schemas.humio.com/dashboard/v0.15.0
+parameters:
+  Car:
+    label: Car
+    valueFilters: {}
+    fileName: carname.csv
+    defaultValue: X5 xDrive50e
+    order: 50
+    valueField: BMW
+    type: file
+    labelField: BMW

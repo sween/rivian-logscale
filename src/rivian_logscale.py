@@ -67,9 +67,6 @@ class RivianLogScale(object):
                 ]
             }
         ]
-        #print(payload)
-        #payload = json.dumps(payload)
-        #print(payload)
         
         client = HumioIngestClient(
             base_url= "https://cloud.community.humio.com",
